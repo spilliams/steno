@@ -1,3 +1,19 @@
+- 2020-11-13 Got a little practice in. I realized I'm not yet ready to fully
+    drop the progress-tracking. My reasoning is that I'm doing this from at
+    least 2 different computers still, and Typey Type doesn't have user
+    accounts, so if I want to track progress there I should copy the file down
+    after every session.  
+    Thankfully I was able to quickly build a CLI tool that will help me merge
+    two JSON files into one, summing the values along the way. That should
+    help in the task of saving the progress JSON at least.  
+    I also remembered that because Georgi only has the two rows for my fingers
+    instead of a steno machine's standard 3, the third thumb button (on both
+    sides) is my number bar modifier.  
+    I wonder again how I might use the extra two pinky keys on the left side
+    too, since I probably won't need--wait...i'm not so terrible at georgi qwerty! [that last phrase only took several minutes to puzzle out, and
+    even then i didn't know all the punctuation keys]. Anyway, even while I'm
+    doing steno I'll want a way to hit arbitrary shortcuts. That'll be
+    interesting.
 - 2020-11-12 Started this repo! I hope in the end it'll contain useful tidbits
     I picked up along the journey, as well as any custom dictionaries I develop.
     Some historical background on the journey so far is below. Going forward,
