@@ -1,3 +1,14 @@
+- 2020-11-15 Upgraded to Plover v4.0.0. When they say "back up your plover.cfg"
+    that file is in `C:\Users\<username>\AppData\Local\plover\plover\`.
+    Wondering if there's a way to stay accountable for daily activity without
+    bloating this journal file.
+- 2020-11-14 journaling with steno now! ok back to qwerty. that took a few
+    minutes, but I'm having fun learning about the control mechanisms (to
+    insert a space or not, to capitalize or not), as well as punctuation and
+    positioning chords. I'd like to try to find a testimonial about Plover's
+    "space placement" option (before or after chord output). I feel like that
+    option may (a) have a medium to large impact on the workflow for coding vs
+    prose, and (b) be really hard to re-train later.
 - 2020-11-13 Got a little practice in. I realized I'm not yet ready to fully
     drop the progress-tracking. My reasoning is that I'm doing this from at
     least 2 different computers still, and Typey Type doesn't have user
