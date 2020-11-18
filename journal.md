@@ -1,3 +1,12 @@
+- 2020-11-17 Maybe I'll be satisfied looking at the [progress.json activity page](https://github.com/spilliams/steno/commits/main/progress.json)
+    for an indication of how consistently I'm practicing. It's no heatcalendar,
+    but it'll do.  
+    In other news, I've got a cheat sheet of punctuation and whitespacing (the
+    book didn't mention, but it's `T*AB` for a tab character). Next item todo
+    is to figure out how people manage modifier keys and navigation keys.  
+    The real crux is this use case: hold down ctrl (or cmd). Press tab any
+    number of times. Also hold shift. Press tab some more times. Let go of
+    shift... let go of ctrl (cmd).
 - 2020-11-15 Upgraded to Plover v4.0.0. When they say "back up your plover.cfg"
     that file is in `C:\Users\<username>\AppData\Local\plover\plover\`.
     Wondering if there's a way to stay accountable for daily activity without
