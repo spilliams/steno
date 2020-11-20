@@ -1,3 +1,18 @@
+- 2020-11-19 Today I updated my qmk_firmware repo to be updated with what Germ
+    has on their side. I tried a PR, but that got really mucky with a changed
+    file and a changed submodule, so I backed out, saved patches of my commits,
+    and completely remade my fork. It turns out the changed file also hit my
+    new fork (wtf?), but the patches applied just fine.  
+    Last night I read about dictionaries, and how "Learn Plover" teaches the
+    shift/ctrl/alt/super keys. It's interesting, and I'm ready to start
+    tinkering with my own dictionary for nav & control. I also tried using the
+    Georgi's pre-baked Symbol layer, but had some trouble with the alt-tab
+    behavior I expect (that I can hold one and tap the other, and the firmware
+    will send those intermediate actions despite me still holding alt (or cmd)).  
+    It's worth re-flashing with the updated qmk from germ, and if that doesn't
+    work I can still try my own symbol map and if THAT doesn't work I can fall
+    back to using a steno dictionary entries to define "alt-tab once", "alt-tab
+    twice" etc.
 - 2020-11-17 Maybe I'll be satisfied looking at the [progress.json activity page](https://github.com/spilliams/steno/commits/main/progress.json)
     for an indication of how consistently I'm practicing. It's no heatcalendar,
     but it'll do.  
