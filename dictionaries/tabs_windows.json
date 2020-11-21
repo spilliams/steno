@@ -1,0 +1,16 @@
+{
+    "K-FRLGTS":   "{#Alt_L(Tab)}{^}{-|}",
+    "W-FRLGTS":   "{#Alt_L(Tab Tab)}{^}{-|}",
+    "R-FRLGTS":   "{#Alt_L(Tab Tab Tab)}{^}{-|}",
+    "KW-FRLGTS":  "{#Alt_L(Tab Tab Tab Tab)}{^}{-|}",
+    "KR-FRLGTS":  "{#Alt_L(Tab Tab Tab Tab Tab)}{^}{-|}",
+    "WR-FRLGTS":  "{#Alt_L(Tab Tab Tab Tab Tab Tab)}{^}{-|}",
+    "KWR-FRLGTS": "{#Alt_L(Tab Tab Tab Tab Tab Tab Tab)}}{^}{-|}",
+    "K*FRLGTS":   "{#Shift_L(Alt_L(Tab))}{^}{-|}",
+    "W*FRLGTS":   "{#Shift_L(Alt_L(Tab Tab))}{^}{-|}",
+    "R*FRLGTS":   "{#Shift_L(Alt_L(Tab Tab Tab))}{^}{-|}",
+    "KW*FRLGTS":  "{#Shift_L(Alt_L(Tab Tab Tab Tab))}{^}{-|}",
+    "KR*FRLGTS":  "{#Shift_L(Alt_L(Tab Tab Tab Tab Tab))}{^}{-|}",
+    "WR*FRLGTS":  "{#Shift_L(Alt_L(Tab Tab Tab Tab Tab Tab))}{^}{-|}",
+    "KWR*FRLGTS": "{#Shift_L(Alt_L(Tab Tab Tab Tab Tab Tab Tab))}}{^}{-|}"
+}

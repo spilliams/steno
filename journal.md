@@ -1,10 +1,20 @@
 - 2020-11-20 I adopted a nav/command dictionary that I found on the internet.
     http://www.openstenoproject.org/stenodict/dictionaries/single_stroke_commands.html
     I have by now also read the section in Learn Plover! about dictionaries, so
-    I feel well-equipped to start tabbing my way around.
+    I feel well-equipped to start tabbing my way around.  
     The only real trouble is (on a Windows machine) I keep this repo
     checked-out to a directory in WSL2, which is not (easily) accessible from
-    Windows, where Plover is installed. Whoops.
+    Windows, where Plover is installed. Whoops.  
+    Ok, I realized (again) that this will not solve all my nav use cases. I
+    still need a way to alt-tab that either lets me hold alt while hitting tab
+    any number of times (and sending those inputs individually, so I can see
+    results), or I need a brief for "hit alt-tab twice in a row" etc, up to
+    like 4 or 5 (the max number of windows I'd want to be open in a space
+    anyway). Gonna try setting some of my own nav briefs for this.  
+    <experiments with Alt_L(Tab Tab Tab) ensue>  
+    I think this particular behavior is not something I can achieve with steno.
+    Perhaps it is time to back up and take another look at the QMK symbol layer
+    bound to my bottom left pinky key. Another night.
 - 2020-11-19 Today I updated my qmk_firmware repo to be updated with what Germ
     has on their side. I tried a PR, but that got really mucky with a changed
     file and a changed submodule, so I backed out, saved patches of my commits,
