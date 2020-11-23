@@ -1,3 +1,73 @@
+- 2020-11-22 Last night / this morning I read a lot about how QMK works with
+    layers. Then I worked up keymaps for both the Butterstick and the Georgi!  
+    The first milestone is complete: I can successfully alt-tab any number of
+    times!  
+    Next milestones:
+    - make the nav layer key (and fn layer key) momentary-layers (like OSL, but
+    that didn't seem to work immediately).
+        > `OSL(layer)` - momentarily activates `layer` until the next key is
+        pressed. See One Shot Keys for details and additional functionality.
+        ```
+        // One-shot layer - 256 layer max
+        #define OSL(layer) (QK_ONE_SHOT_LAYER | ((layer)&0xFF))
+        ```
+        Defined in `quantum/quantum_keycods.h` and used in the `action_for_keycode`
+        function of `quantum/keymap_common.c`.
+        ```
+        #ifndef NO_ACTION_ONESHOT
+            case QK_ONE_SHOT_LAYER ... QK_ONE_SHOT_LAYER_MAX:;
+                // OSL(action_layer) - One-shot action_layer
+                action_layer = keycode & 0xFF;
+                action.code  = ACTION_LAYER_ONESHOT(action_layer);
+                break;
+            case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:;
+                // OSM(mod) - One-shot mod
+                mod         = mod_config(keycode & 0xFF);
+                action.code = ACTION_MODS_ONESHOT(mod);
+                break;
+        #endif
+        ```
+        which leads to
+        ```
+        #define ACTION_LAYER_ONESHOT(layer) ACTION_LAYER_TAP((layer), OP_ONESHOT)
+        ...
+        #define ACTION_LAYER_TAP(layer, key) ACTION(ACT_LAYER_TAP, (layer) << 8 | (key))
+        ...
+        num action_kind_id { ACT_LAYER_TAP = 0b1010 /* Layer 0-15 */ }
+        #define ACTION(kind, param) ((kind) << 12 | (param))
+        ```
+        So of course all this code is just a bunch of bit shifting.  
+        Let's try `OSL()` one more time, just in case...  
+        Yeah, it's probably because I had `#define NO_ACTION_ONESHOT` in my
+        `config.h`, huh?  
+        Nope, `OSL` still isn't working on the georgi. Switching to Butterstick
+        to see if it's a steno mode thing.  
+        Yes, `OSL` works on the butterstick. Also, implementing
+        `oneshot_layer_changed_user` in `keymap.c` makes it print to the QMK
+        toolbox (I wasn't seeing those prints from Georgi).  
+        Switching back to Georgi for one more shot, then I'll compromise with
+        `TG` and hope I don't get in a bad layer state.  
+          
+        I got it! I had to delete the `#define NO_ACTION_ONESHOT`, _and_ go
+        into `rules.mk` (beware there's one for the keyboard and one for the
+        keymap!) and set `NO_TAPPING = no`! Now I can use `OSL` to shift layers.  
+    - maybe write a custom function like `TH(kc1, kc2)`, where if you tap it
+    sends `kc1`, and if you hold it sends `kc2`. For inspiration:
+        > `LT(layer, kc)` - momentarily activates `layer` when held, and sends
+        > `kc` when tapped. Only supports layers 0-15.
+        ```
+        // L-ayer, T-ap - 256 keycode max, 16 layer max
+        #define LT(layer, kc) (QK_LAYER_TAP | (((layer)&0xF) << 8) | ((kc)&0xFF))
+        ...
+        // M-od, T-ap - 256 keycode max
+        #define MT(mod, kc) (QK_MOD_TAP | (((mod)&0x1F) << 8) | ((kc)&0xFF))
+        ```
+        Since stubbing this out and then playing with my layers quite a bit
+        above, I realized I had an extra blank key next to the media keys, so
+        I no longer need to double up `TH(KC_VOLD, KC_MUTE)`, but maybe it'd be
+        a fun experiment sometime anyway. Another day. Today my nav and media
+        layers work great and I should take some time to practice them (and
+        practice steno).
 - 2020-11-20 I adopted a nav/command dictionary that I found on the internet.
     http://www.openstenoproject.org/stenodict/dictionaries/single_stroke_commands.html
     I have by now also read the section in Learn Plover! about dictionaries, so
