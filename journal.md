@@ -1,3 +1,84 @@
+- 2020-11-23 A few things I noticed in practice tonight
+    - tapping the OSL key doesn't let me alt-tab with impunity, but holding it
+        does.
+    - my custom nav layer doesn't support select-all, cut, copy, paste, undo,
+        or redo. I wonder again if I should record the number of times I use
+        a feature in a day, and put those at the front and center.  
+        oh, also ctrl-backspace (or alt-bsp and cmd-bsp on mac).  
+        Even if I put my most common commands on the first nav layer, I still
+        need either  
+
+    1. (hw, current status) a qwerty keyboard standing by  
+        pro: I have it (it's free)  
+        con: slow to switch from typing to commanding  
+        con: BIG desk clutter  
+        con: need the qwerty keyboard for typing while learning steno
+    2. (hw) a macropad (e.g. Butterstick) standing by  
+        pro: I have it (it's free)  
+        con: slow to switch from typing to commanding  
+        con: smol desk clutter  
+        con: need the qwerty keyboard for typing while learning steno
+    3. (fw) three or more layers on the georgi  
+        pro: I have it (it's free)  
+        pro: everything is at my fingertips (it's quick to switch)  
+        pro: no clutter!  
+        con: patience and time to tweak and learn the layers  
+        con: need the qwerty keyboard for typing while learning steno
+    4. (hw) A BIGGER georgi, with more keys to hand (see: Gergo. I
+        think maybe Gergoplex isn't enough columns)  
+        pro: it's a kit I can build myself (another round of custom
+        switches, this time maybe kailh silver?)  
+        pro: everything is at my fingertips (quick to switch)  
+        pro: no clutter!  
+        pro: less need to layer the commands (quickER than switching)  
+        pro: do not need a qwerty kicking around while I learn steno  
+        con: hard to program it to be steno sometimes and command
+        sometimes?  
+        con: I'd need to build my own enclosure for it.
+    5. (hw) white tiger option: get an ergodox already (~$350)  
+        pro: it's a kit I can configure myself (it does hotswap)  
+        pro: everything is at my fingertips  
+        pro: no clutter!  
+        pro: less need to layer the commands  
+        pro: do not need a qwerty kicking around while I learn steno  
+        con: hard to program it to be steno sometimes and command
+        sometimes?  
+        con: expensive
+    6. (sw) learn and develop the Single Stroke commands dictionary in
+        Plover  
+        pro: I have it (it's free)  
+        pro: VERY easy to reconfigure a broken brief on the fly  
+        con: need the qwerty keyboard for typing while learning steno  
+        con: patience and time to tweak and learn the briefs
+
+    Options 4 and 5 (Gergo and Ergodox) are similar enough that I can
+    runoff them: With Gergo, I have to design and build the enclosure,
+    and buy keycaps and switches. With Ergodox, I just have to spend
+    ~$280 marginally (and maybe make or buy steno-friendly keycaps).
+    With Gergo, I get to make it look however I want, with Ergodox, no
+    such personalization.  
+    ```
+    GERGO           ERGODOX
+    + personalized  - cost
+    - kit work      - not personalized
+    ```
+    Actually, now that I think about it, the Gergo wouldn't be a full size
+    qwerty, so I'd be training (1) steno, (2) columnar qwerty, and (3) gergo
+    commands and shortcuts for qwerty. Ergodox loses on customization, but
+    "costs" less in terms of money-work, and wins on me not doing that (3)
+    training.
+
+    I'd also point out that the "do not need the qwerty keyboard for typing
+    while learning steno" is not worth nothing.
+
+    So it's really down to an ideological choice: do I want to do this
+    re-training of my brain and fingers through software, firmware, or
+    hardware? And even if I do it through software, do I want the greater
+    hardware anyway to speed things along, declutter the process, and/or be
+    more ergonomic for me? (For the record I have yet to experience any RSI...)
+    
+    I will sleep on it.
+
 - 2020-11-22 Last night / this morning I read a lot about how QMK works with
     layers. Then I worked up keymaps for both the Butterstick and the Georgi!  
     The first milestone is complete: I can successfully alt-tab any number of
