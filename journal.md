@@ -1,3 +1,11 @@
+- 2020-11-24 Made a cheat-sheet for the single-stroke commands dictionary
+    tonight. Did my first cut, paste and undo! The shapes are a little goofy
+    but I think they'll suffice for my needs. Might even allow me to free up
+    some keys on the firmware layer (no need for arrows, letters, or functions).  
+    I did order an Ergodox. The clutter argument was very compelling. It'll
+    take 4 weeks to get here, so in the meantime I'll keep practicing on Georgi.  
+    I'm excited to put together a firmware for Ergodox that does everything I
+    need--and with LED control!
 - 2020-11-23 A few things I noticed in practice tonight
     - tapping the OSL key doesn't let me alt-tab with impunity, but holding it
         does.
