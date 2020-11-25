@@ -95,7 +95,7 @@ func mergeJSON(a, b map[string]int) (map[string]int, error) {
 }
 
 func putJSON(j map[string]int, filename string) error {
-	jB, err := json.Marshal(j)
+	jB, err := json.MarshalIndent(j, "", "  ")
 	if err != nil {
 		return err
 	}

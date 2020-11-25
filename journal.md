@@ -1,3 +1,9 @@
+- 2020-11-25 I just realized: using alt to mouse-select multiple cursors in VS
+    Code does _not_ trigger the OSL to fall back. Is that a task I do with the
+    dictionary instead? No, dictionary can't help there. HMM!  
+    Perhaps a key on the symbol layer that does a `TO(BASE)`. yup, that works!  
+    I've also printed out some cheat-sheets, and now I guess nothing is
+    stopping me from developing some muscle memory...
 - 2020-11-24 Made a cheat-sheet for the single-stroke commands dictionary
     tonight. Did my first cut, paste and undo! The shapes are a little goofy
     but I think they'll suffice for my needs. Might even allow me to free up
