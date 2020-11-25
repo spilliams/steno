@@ -95,6 +95,8 @@ func mergeJSON(a, b map[string]int) (map[string]int, error) {
 }
 
 func putJSON(j map[string]int, filename string) error {
+	// TODO: sort by key
+	// TODO: strip leading and trailing space from key?
 	jB, err := json.MarshalIndent(j, "", "  ")
 	if err != nil {
 		return err
