@@ -2,17 +2,28 @@ package main
 
 import (
 	"fmt"
-	"log"
 
+	"github.com/apex/log"
+	"github.com/apex/log/handlers/cli"
 	"github.com/spf13/cobra"
 	"github.com/spilliams/steno/cli/dictionary"
 	"github.com/spilliams/steno/cli/jsonfile"
 )
 
+var verbose bool
+
 func main() {
+	cobra.OnInitialize(initLogger)
 	cmd := newRootCmd()
 	if err := cmd.Execute(); err != nil {
-		log.Fatal(err)
+		log.WithError(err).Fatal("")
+	}
+}
+
+func initLogger() {
+	log.SetHandler(cli.Default)
+	if verbose {
+		log.SetLevel(log.DebugLevel)
 	}
 }
 
@@ -25,6 +36,8 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newMergeJSONCmd())
 	cmd.AddCommand(newCleanJSONCmd())
 	cmd.AddCommand(newGenerateDictionaryCmd())
+
+	cmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "turn this on to get MORE")
 
 	return cmd
 }
@@ -45,23 +58,23 @@ event of a key collision, the values will be summed.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			a, err := jsonfile.ReadFile(args[0])
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			a = jsonfile.Clean(a)
-			log.Println(a)
+			log.WithField("a", a).Debug("json read")
 
 			b, err := jsonfile.ReadFile(args[1])
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			b = jsonfile.Clean(b)
-			log.Println(b)
+			log.WithField("b", b).Debug("json read")
 
 			c, err := jsonfile.Merge(a, b)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
-			log.Println(c)
+			log.WithField("c", c).Debug("json merged")
 			if outputFile == "" {
 				outputFile = args[0]
 			}
@@ -85,10 +98,10 @@ func newCleanJSONCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			a, err := jsonfile.ReadFile(args[0])
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			a = jsonfile.Clean(a)
-			log.Println(a)
+			log.WithField("a", a).Debug("json read")
 			return jsonfile.WriteFile(a, outputFile)
 		},
 	}
@@ -105,13 +118,17 @@ func newGenerateDictionaryCmd() *cobra.Command {
 		Aliases: []string{"gen-dict"},
 		Short:   "Generates a Plover dictionary file from a set of rules.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println("parsing STPH as a Keymask...")
-			k, err := dictionary.ParseKeymask("STPH")
+			stroke := "#H-F"
+			log.WithField("stroke", stroke).Info("Parsing input...")
+			k, err := dictionary.ParseStroke(stroke)
 			if err != nil {
 				return err
 			}
-			fmt.Printf("%#b\n", k)
-			fmt.Println(k)
+			log.WithFields(log.Fields{
+				"binary": fmt.Sprintf("%#b", k),
+				"string": k.String(),
+			}).Info("Parsed")
+
 			return nil
 		},
 	}
