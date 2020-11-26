@@ -19,6 +19,10 @@
         
         I think I can handle that. Why not always generate a `-` until I see it
         break?
+    One final note, someone's blog recommended keeping the dictionary handy,
+    that being able to quickly add or edit definitions was really helpful. I
+    wonder if I could set up a single key in my layer or a brief in a
+    dictionary to run that Plover function?
 - 2020-11-25 I just realized: using alt to mouse-select multiple cursors in VS
     Code does _not_ trigger the OSL to fall back. Is that a task I do with the
     dictionary instead? No, dictionary can't help there. HMM!  
