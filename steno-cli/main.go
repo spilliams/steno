@@ -25,6 +25,7 @@ func newRootCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(newMergeJSONCmd())
+	cmd.AddCommand(newCleanJSONCmd())
 
 	return cmd
 }
@@ -33,7 +34,7 @@ func newMergeJSONCmd() *cobra.Command {
 	var outputFile string
 	cmd := &cobra.Command{
 		Use:     "merge-json <a> <b>",
-		Aliases: []string{"merge", "jsonmerge", "mergejson"},
+		Aliases: []string{"merge"},
 		Args:    cobra.ExactArgs(2),
 		Short:   "Merges 2 JSON files into 1.",
 		Long: `Merges 2 JSON files into 1. Requires two args for the input
@@ -66,6 +67,30 @@ event of a key collision, the values will be summed.`,
 				outputFile = args[0]
 			}
 			return putJSON(c, outputFile)
+		},
+	}
+
+	cmd.Flags().StringVarP(&outputFile, "output", "o", "", "The output file (optional)")
+
+	return cmd
+}
+
+func newCleanJSONCmd() *cobra.Command {
+	var outputFile string
+	cmd := &cobra.Command{
+		Use:     "clean-json <a>",
+		Aliases: []string{"clean"},
+		Args:    cobra.ExactArgs(1),
+		Short:   "Cleans a JSON file",
+		Long:    "Cleans a JSON file. Trims whitespace from keys (while merging them with potential duplicates), and makes sure characters are not HTML-escaped)",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			a, err := getJSON(args[0])
+			if err != nil {
+				log.Fatal(err)
+			}
+			a = clean(a)
+			log.Println(a)
+			return putJSON(a, outputFile)
 		},
 	}
 
