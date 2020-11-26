@@ -3,41 +3,199 @@ package dictionary
 import "testing"
 
 func TestParseKeymask(t *testing.T) {
-	cases := map[string]Keymask{
-		"S":   0b1000000000000000000000,
-		"T":   0b0100000000000000000000,
-		"K":   0b0010000000000000000000,
-		"P":   0b0001000000000000000000,
-		"W":   0b0000100000000000000000,
-		"H":   0b0000010000000000000000,
-		"R":   0b0000001000000000000000,
-		"A":   0b0000000100000000000000,
-		"O":   0b0000000010000000000000,
-		"*":   0b0000000001000000000000,
-		"E":   0b0000000000100000000000,
-		"U":   0b0000000000010000000000,
-		"-F":  0b0000000000001000000000,
-		"-R":  0b0000000000000100000000,
-		"-P":  0b0000000000000010000000,
-		"-B":  0b0000000000000001000000,
-		"-L":  0b0000000000000000100000,
-		"-G":  0b0000000000000000010000,
-		"-T":  0b0000000000000000001000,
-		"-S":  0b0000000000000000000100,
-		"-D":  0b0000000000000000000010,
-		"-Z":  0b0000000000000000000001,
-		"R-R": 0b0000001000000100000000,
-		"R*R": 0b0000001001000100000000,
+	cases := []struct {
+		name   string
+		input  string
+		mask   Keymask
+		output string
+	}{
+		{
+			name:   "S should be S",
+			input:  "S",
+			mask:   0b01000000000000000000000,
+			output: "S",
+		},
+		{
+			name:   "T should be T",
+			input:  "T",
+			mask:   0b00100000000000000000000,
+			output: "T",
+		},
+		{
+			name:   "K should be K",
+			input:  "K",
+			mask:   0b00010000000000000000000,
+			output: "K",
+		},
+		{
+			name:   "P should be P",
+			input:  "P",
+			mask:   0b00001000000000000000000,
+			output: "P",
+		},
+		{
+			name:   "W should be W",
+			input:  "W",
+			mask:   0b00000100000000000000000,
+			output: "W",
+		},
+		{
+			name:   "H should be H",
+			input:  "H",
+			mask:   0b00000010000000000000000,
+			output: "H",
+		},
+		{
+			name:   "R should be R",
+			input:  "R",
+			mask:   0b00000001000000000000000,
+			output: "R",
+		},
+		{
+			name:   "A should be A",
+			input:  "A",
+			mask:   0b00000000100000000000000,
+			output: "A",
+		},
+		{
+			name:   "O should be O",
+			input:  "O",
+			mask:   0b00000000010000000000000,
+			output: "O",
+		},
+		{
+			name:   "* should be *",
+			input:  "*",
+			mask:   0b00000000001000000000000,
+			output: "*",
+		},
+		{
+			name:   "E should be E",
+			input:  "E",
+			mask:   0b00000000000100000000000,
+			output: "E",
+		},
+		{
+			name:   "U should be U",
+			input:  "U",
+			mask:   0b00000000000010000000000,
+			output: "U",
+		},
+		{
+			name:   "-F should be -F",
+			input:  "-F",
+			mask:   0b00000000000001000000000,
+			output: "-F",
+		},
+		{
+			name:   "-R should be -R",
+			input:  "-R",
+			mask:   0b00000000000000100000000,
+			output: "-R",
+		},
+		{
+			name:   "-P should be -P",
+			input:  "-P",
+			mask:   0b00000000000000010000000,
+			output: "-P",
+		},
+		{
+			name:   "-B should be -B",
+			input:  "-B",
+			mask:   0b00000000000000001000000,
+			output: "-B",
+		},
+		{
+			name:   "-L should be -L",
+			input:  "-L",
+			mask:   0b00000000000000000100000,
+			output: "-L",
+		},
+		{
+			name:   "-G should be -G",
+			input:  "-G",
+			mask:   0b00000000000000000010000,
+			output: "-G",
+		},
+		{
+			name:   "-T should be -T",
+			input:  "-T",
+			mask:   0b00000000000000000001000,
+			output: "-T",
+		},
+		{
+			name:   "-S should be -S",
+			input:  "-S",
+			mask:   0b00000000000000000000100,
+			output: "-S",
+		},
+		{
+			name:   "-D should be -D",
+			input:  "-D",
+			mask:   0b00000000000000000000010,
+			output: "-D",
+		},
+		{
+			name:   "-Z should be -Z",
+			input:  "-Z",
+			mask:   0b00000000000000000000001,
+			output: "-Z",
+		},
+		{
+			name:   "a simple word",
+			input:  "R-R",
+			mask:   0b00000001000000100000000,
+			output: "R-R",
+		},
+		{
+			name:   "same simple word, with star",
+			input:  "R*R",
+			mask:   0b00000001001000100000000,
+			output: "R*R",
+		},
+		{
+			name:   "number input",
+			input:  "4-6",
+			mask:   0b10000010000001000000000,
+			output: "4-6",
+		},
+		{
+			name:   "incorrect number input should come out correct",
+			input:  "#H-F",
+			mask:   0b10000010000001000000000,
+			output: "4-6",
+		},
+		{
+			name:   "number input with no numbers present",
+			input:  "#-D",
+			mask:   0b10000000000000000000010,
+			output: "#-D",
+		},
+		{
+			name:   "number with only a star",
+			input:  "#*",
+			mask:   0b10000000001000000000000,
+			output: "#*",
+		},
+		{
+			name:   "number by itself",
+			input:  "#",
+			mask:   0b10000000000000000000000,
+			output: "#",
+		},
 	}
 
-	for input, expected := range cases {
-		t.Run(input, func(t *testing.T) {
-			actual, err := ParseKeymask(input)
+	for _, c := range cases {
+		t.Run(c.input, func(t *testing.T) {
+			actual, err := ParseStroke(c.input)
 			if err != nil {
 				t.Errorf("ParseKeymask returned unexpected error: %v", err)
 			}
-			if actual != expected {
-				t.Errorf("Expected %#b (%s), got %#b (%s)", expected, expected, actual, actual)
+			if actual != c.mask {
+				t.Errorf("Expected %#b (%s), got %#b (%s)", c.mask, c.mask, actual, actual)
+			}
+			if actual.String() != c.output {
+				t.Errorf("Expected printed string to be %s, got %s", c.output, actual)
 			}
 		})
 	}
