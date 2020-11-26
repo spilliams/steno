@@ -1,14 +1,12 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"io/ioutil"
+	"fmt"
 	"log"
-	"sort"
-	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/spilliams/steno/cli/dictionary"
+	"github.com/spilliams/steno/cli/jsonfile"
 )
 
 func main() {
@@ -26,6 +24,7 @@ func newRootCmd() *cobra.Command {
 
 	cmd.AddCommand(newMergeJSONCmd())
 	cmd.AddCommand(newCleanJSONCmd())
+	cmd.AddCommand(newGenerateDictionaryCmd())
 
 	return cmd
 }
@@ -44,21 +43,21 @@ output.
 This command assumes the JSON objects will be a map of string to int. In the
 event of a key collision, the values will be summed.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			a, err := getJSON(args[0])
+			a, err := jsonfile.ReadFile(args[0])
 			if err != nil {
 				log.Fatal(err)
 			}
-			a = clean(a)
+			a = jsonfile.Clean(a)
 			log.Println(a)
 
-			b, err := getJSON(args[1])
+			b, err := jsonfile.ReadFile(args[1])
 			if err != nil {
 				log.Fatal(err)
 			}
-			b = clean(b)
+			b = jsonfile.Clean(b)
 			log.Println(b)
 
-			c, err := mergeJSON(a, b)
+			c, err := jsonfile.Merge(a, b)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -66,7 +65,7 @@ event of a key collision, the values will be summed.`,
 			if outputFile == "" {
 				outputFile = args[0]
 			}
-			return putJSON(c, outputFile)
+			return jsonfile.WriteFile(c, outputFile)
 		},
 	}
 
@@ -84,13 +83,13 @@ func newCleanJSONCmd() *cobra.Command {
 		Short:   "Cleans a JSON file",
 		Long:    "Cleans a JSON file. Trims whitespace from keys (while merging them with potential duplicates), and makes sure characters are not HTML-escaped)",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			a, err := getJSON(args[0])
+			a, err := jsonfile.ReadFile(args[0])
 			if err != nil {
 				log.Fatal(err)
 			}
-			a = clean(a)
+			a = jsonfile.Clean(a)
 			log.Println(a)
-			return putJSON(a, outputFile)
+			return jsonfile.WriteFile(a, outputFile)
 		},
 	}
 
@@ -99,63 +98,24 @@ func newCleanJSONCmd() *cobra.Command {
 	return cmd
 }
 
-func getJSON(filename string) (map[string]int, error) {
-	inBytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	var inJSON map[string]int
-	if err = json.Unmarshal(inBytes, &inJSON); err != nil {
-		return nil, err
-	}
-	return inJSON, nil
-}
-
-func clean(a map[string]int) map[string]int {
-	// trim space from keys
-	trimmed := make(map[string]int)
-	for k, v := range a {
-		trimmedKey := strings.TrimSpace(k)
-		existing, ok := trimmed[trimmedKey]
-		if ok {
-			trimmed[trimmedKey] = existing + v
-		} else {
-			trimmed[trimmedKey] = v
-		}
-	}
-	return trimmed
-}
-
-func mergeJSON(a, b map[string]int) (map[string]int, error) {
-	c := make(map[string]int, len(a))
-	for k, v := range a {
-		c[k] = v
-	}
-	for k, v := range b {
-		if prior, ok := c[k]; ok {
-			c[k] = prior + v
-		} else {
-			c[k] = v
-		}
-	}
-	return c, nil
-}
-
-func putJSON(j map[string]int, filename string) error {
-	var keys []string
-	for k := range j {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	// json loves to escape some html characters
-	buf := new(bytes.Buffer)
-	enc := json.NewEncoder(buf)
-	enc.SetEscapeHTML(false)
-	enc.SetIndent("", "  ")
-	if err := enc.Encode(&j); err != nil {
-		return err
+func newGenerateDictionaryCmd() *cobra.Command {
+	var outputFile string
+	cmd := &cobra.Command{
+		Use:     "generate-dictionary --rules r.json [--output dict.json]",
+		Aliases: []string{"gen-dict"},
+		Short:   "Generates a Plover dictionary file from a set of rules.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Println("parsing STPH as a Keymask...")
+			k, err := dictionary.ParseKeymask("STPH")
+			if err != nil {
+				return err
+			}
+			fmt.Printf("%#b\n", k)
+			fmt.Println(k)
+			return nil
+		},
 	}
 
-	return ioutil.WriteFile(filename, buf.Bytes(), 0644)
+	cmd.Flags().StringVarP(&outputFile, "output", "o", "dict.json", "The name to save the dictionary file as (optional)")
+	return cmd
 }

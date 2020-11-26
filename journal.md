@@ -1,3 +1,24 @@
+- 2020-11-25 cont'd: I've started a tiny bit of coding with steno. It's alive!
+    Starting to think about building my own "single stroke commands" dictionary,
+    but because it's so many different chords, thinking of building a generator
+    that takes an input of all the chords for each modifier (plus a few others
+    for nav/cursor control), and then it prints out all the hundreds of
+    permutations! Some things I'm learning about dictionary entries as I do
+    this:
+    - a `/` is present to delineate strokes
+    - a `-` is present to delineate left-hand vs right-hand, but only
+        1. if there are no left-hand keys in the chord
+        2. if writing it down without a `-` would show ambiguity (`HRPB` is
+        either `HR-PB` "license", or `H-RPB` "hit-and-run")
+        3. if there is no ambiguity? (e.g. `*ET/K-L` "ethical")
+        4. only if there's also no `*`.
+        
+        Does _Learn Plover!_ have anything to say on this subject?
+        > When defining dictionary definitions by hand, you should be sure to
+        > include the hyphen when appropriate
+        
+        I think I can handle that. Why not always generate a `-` until I see it
+        break?
 - 2020-11-25 I just realized: using alt to mouse-select multiple cursors in VS
     Code does _not_ trigger the OSL to fall back. Is that a task I do with the
     dictionary instead? No, dictionary can't help there. HMM!  
