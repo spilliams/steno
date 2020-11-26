@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"sort"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -44,12 +47,16 @@ event of a key collision, the values will be summed.`,
 			if err != nil {
 				log.Fatal(err)
 			}
+			a = clean(a)
 			log.Println(a)
+
 			b, err := getJSON(args[1])
 			if err != nil {
 				log.Fatal(err)
 			}
+			b = clean(b)
 			log.Println(b)
+
 			c, err := mergeJSON(a, b)
 			if err != nil {
 				log.Fatal(err)
@@ -79,6 +86,21 @@ func getJSON(filename string) (map[string]int, error) {
 	return inJSON, nil
 }
 
+func clean(a map[string]int) map[string]int {
+	// trim space from keys
+	trimmed := make(map[string]int)
+	for k, v := range a {
+		trimmedKey := strings.TrimSpace(k)
+		existing, ok := trimmed[trimmedKey]
+		if ok {
+			trimmed[trimmedKey] = existing + v
+		} else {
+			trimmed[trimmedKey] = v
+		}
+	}
+	return trimmed
+}
+
 func mergeJSON(a, b map[string]int) (map[string]int, error) {
 	c := make(map[string]int, len(a))
 	for k, v := range a {
@@ -95,12 +117,20 @@ func mergeJSON(a, b map[string]int) (map[string]int, error) {
 }
 
 func putJSON(j map[string]int, filename string) error {
-	// TODO: sort by key
-	// TODO: strip leading and trailing space from key?
-	jB, err := json.MarshalIndent(j, "", "  ")
-	if err != nil {
+	var keys []string
+	for k := range j {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	// json loves to escape some html characters
+	buf := new(bytes.Buffer)
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(&j); err != nil {
 		return err
 	}
 
-	return ioutil.WriteFile(filename, jB, 0644)
+	return ioutil.WriteFile(filename, buf.Bytes(), 0644)
 }
