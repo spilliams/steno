@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
 	"github.com/spf13/cobra"
@@ -34,6 +36,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newMergeProgressCmd())
 	cmd.AddCommand(newCleanProgressCmd())
 	cmd.AddCommand(newGenerateDictionaryCmd())
+	// TODO: new command that compares two dictionary files and finds collisions between keys
 
 	cmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "turn this on to get MORE")
 
@@ -122,10 +125,13 @@ func newGenerateDictionaryCmd() *cobra.Command {
 				return err
 			}
 			log.WithField("rules", rules).Info("rules file read")
-			if err := rules.MustBeValid(); err != nil {
-				return err
+			if errs := rules.MustBeValid(); len(errs) > 0 {
+				for _, err := range errs {
+					log.Error(err.Error())
+				}
+				return fmt.Errorf("rules file was invalid")
 			}
-			log.Info("Rules are valid")
+			log.Info("rules are valid")
 
 			// TODO build the rest of the dictionary
 

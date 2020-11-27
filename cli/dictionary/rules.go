@@ -31,7 +31,8 @@ type Rules struct {
 	Gui       Keymask
 }
 
-func (r *Rules) MustBeValid() error {
+func (r *Rules) MustBeValid() []error {
+	errs := make([]error, 0)
 	keymaskNames := []string{
 		"escape",
 		"space",
@@ -105,19 +106,19 @@ func (r *Rules) MustBeValid() error {
 	// nothing can be empty
 	for i, m := range keymasks {
 		if m == 0 {
-			return fmt.Errorf("Mask for %s must not be blank", keymaskNames[i])
+			errs = append(errs, fmt.Errorf("Mask for %s must not be blank", keymaskNames[i]))
 		}
 	}
 	for i, m := range modmasks {
 		if m == 0 {
-			return fmt.Errorf("Mask for %s must not be blank", modmaskNames[i])
+			errs = append(errs, fmt.Errorf("Mask for %s must not be blank", modmaskNames[i]))
 		}
 	}
 	// no two key masks can be the same
 	for i, m := range keymasks {
 		for j := i + 1; j < len(keymasks); j++ {
 			if m == keymasks[j] {
-				return fmt.Errorf("Masks for %s and %s must not be the same (%s)", keymaskNames[i], keymaskNames[j], m)
+				errs = append(errs, fmt.Errorf("Masks for %s and %s must not be the same (%s)", keymaskNames[i], keymaskNames[j], m))
 			}
 		}
 	}
@@ -125,7 +126,7 @@ func (r *Rules) MustBeValid() error {
 	for i, m := range modmasks {
 		for j := i + 1; j < len(modmasks); j++ {
 			if m == modmasks[j] {
-				return fmt.Errorf("Masks for %s and %s must not be the same (%s)", modmaskNames[i], modmaskNames[j], m)
+				errs = append(errs, fmt.Errorf("Masks for %s and %s must not be the same (%s)", modmaskNames[i], modmaskNames[j], m))
 			}
 		}
 	}
@@ -134,7 +135,7 @@ func (r *Rules) MustBeValid() error {
 		for j, n := range keymasks {
 			for k, o := range modmasks {
 				if m|n == o {
-					return fmt.Errorf("Masks for %s+%s and %s must not be the same (%s)", modmaskNames[i], keymaskNames[j], modmaskNames[k], o)
+					errs = append(errs, fmt.Errorf("Masks for %s+%s and %s must not be the same (%s)", modmaskNames[i], keymaskNames[j], modmaskNames[k], o))
 				}
 			}
 		}
@@ -144,7 +145,7 @@ func (r *Rules) MustBeValid() error {
 		for j, n := range keymasks {
 			for k, o := range keymasks {
 				if m|n == o {
-					return fmt.Errorf("Masks for %s+%s and %s must not be the same (%s)", modmaskNames[i], keymaskNames[j], keymaskNames[k], o)
+					errs = append(errs, fmt.Errorf("Masks for %s+%s and %s must not be the same (%s)", modmaskNames[i], keymaskNames[j], keymaskNames[k], o))
 				}
 			}
 		}
@@ -158,15 +159,14 @@ func (r *Rules) MustBeValid() error {
 						continue
 					}
 					if m|n == o|p {
-						return fmt.Errorf("Masks for %s+%s and %s+%s must not be the same (%s)", modmaskNames[i], keymaskNames[j], modmaskNames[k], keymaskNames[l], Keymask(i|j))
+						errs = append(errs, fmt.Errorf("Masks for %s+%s and %s+%s must not be the same (%s)", modmaskNames[i], keymaskNames[j], modmaskNames[k], keymaskNames[l], Keymask(i|j)))
 					}
 				}
 			}
 		}
 	}
-	// TODO: no mod, key, or mod+key must be the same as a fingerspelling
-	// no mod, key, or mod+key must be the same as any mod+fingerspelling
-	return nil
+
+	return errs
 }
 
 func (r *Rules) UnmarshalJSON(b []byte) error {
