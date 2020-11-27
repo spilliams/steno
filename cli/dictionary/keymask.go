@@ -259,6 +259,7 @@ func (k Keymask) IsFingerspelling() bool {
 		LeftK | LeftP,
 		LeftK | LeftW | LeftR,
 		LeftS | LeftT | LeftK | LeftP | LeftW,
+		LeftS | LeftT | LeftK, // alternate z
 	}
 	for _, fingerspelling := range fingerspellings {
 		if k == fingerspelling {

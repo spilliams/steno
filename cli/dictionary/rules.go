@@ -159,7 +159,7 @@ func (r *Rules) MustBeValid() []error {
 						continue
 					}
 					if m|n == o|p {
-						errs = append(errs, fmt.Errorf("Masks for %s+%s and %s+%s must not be the same (%s)", modmaskNames[i], keymaskNames[j], modmaskNames[k], keymaskNames[l], Keymask(i|j)))
+						errs = append(errs, fmt.Errorf("Masks for %s+%s and %s+%s must not be the same (%s)", modmaskNames[i], keymaskNames[j], modmaskNames[k], keymaskNames[l], Keymask(m|n)))
 					}
 				}
 			}
