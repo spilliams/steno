@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
@@ -133,9 +136,21 @@ func newGenerateDictionaryCmd() *cobra.Command {
 			}
 			log.Info("rules are valid")
 
-			// TODO build the rest of the dictionary
+			f := dictionary.NewFactory(nil)
+			d := f.Generate(rules)
 
-			return nil
+			// encode d into a buffer of bytes
+			buf := new(bytes.Buffer)
+			enc := json.NewEncoder(buf)
+			enc.SetEscapeHTML(false)
+			enc.SetIndent("", "  ")
+			if err := enc.Encode(d); err != nil {
+				return err
+			}
+
+			// write those bytes to a file
+			log.WithField("filename", outputFile).Info("writing dictionary file")
+			return ioutil.WriteFile(outputFile, buf.Bytes(), 0644)
 		},
 	}
 

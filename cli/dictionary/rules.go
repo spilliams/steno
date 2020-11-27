@@ -168,14 +168,14 @@ func (r *Rules) MustBeValid() []error {
 	// nothing can match a fingerspelling
 	checkedKeymasks := false
 	for i, m := range modmasks {
-		if m.IsFingerspelling() {
+		if m.isFingerspelling() {
 			errs = append(errs, fmt.Errorf("Mask for %s matches a fingerspelling (%s)", modmaskNames[i], m))
 		}
 		for j, n := range keymasks {
-			if !checkedKeymasks && n.IsFingerspelling() {
+			if !checkedKeymasks && n.isFingerspelling() {
 				errs = append(errs, fmt.Errorf("Mask for %s matches a fingerspelling (%s)", keymaskNames[j], n))
 			}
-			if (m | n).IsFingerspelling() {
+			if (m | n).isFingerspelling() {
 				errs = append(errs, fmt.Errorf("Mask for %s+%s matches a fingerspelling (%s)", modmaskNames[i], keymaskNames[j], m|n))
 			}
 		}

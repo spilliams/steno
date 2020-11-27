@@ -21,11 +21,11 @@ const (
 	LeftW     Keymask = 1 << 17
 	LeftH     Keymask = 1 << 16
 	LeftR     Keymask = 1 << 15
-	A         Keymask = 1 << 14
-	O         Keymask = 1 << 13
+	StenoA    Keymask = 1 << 14
+	StenoO    Keymask = 1 << 13
 	Star      Keymask = 1 << 12
-	E         Keymask = 1 << 11
-	U         Keymask = 1 << 10
+	StenoE    Keymask = 1 << 11
+	StenoU    Keymask = 1 << 10
 	RightF    Keymask = 1 << 9
 	RightR    Keymask = 1 << 8
 	RightP    Keymask = 1 << 7
@@ -38,8 +38,19 @@ const (
 	RightZ    Keymask = 1
 	allLefts  Keymask = LeftS | LeftT | LeftK | LeftP | LeftW | LeftH | LeftR
 	allRights Keymask = RightF | RightR | RightP | RightB | RightL | RightG | RightT | RightS | RightD | RightZ
+	Steno1    Keymask = Num | LeftS
+	Steno2    Keymask = Num | LeftT
+	Steno3    Keymask = Num | LeftP
+	Steno4    Keymask = Num | LeftH
+	Steno5    Keymask = Num | StenoA
+	Steno6    Keymask = Num | RightF
+	Steno7    Keymask = Num | RightP
+	Steno8    Keymask = Num | RightL
+	Steno9    Keymask = Num | RightT
+	Steno0    Keymask = Num | StenoO
 )
 
+// ParseStroke takes in a string (e.g. "STPH") and returns a Keymask or an error.
 func ParseStroke(in string) (Keymask, error) {
 	in = strings.ToUpper(in)
 	letterOrder := regexp.MustCompile(`^S?T?K?P?W?H?R?A?O?\*?-?E?U?F?R?P?B?L?G?T?S?D?Z?$`)
@@ -131,6 +142,8 @@ func (k Keymask) String() string {
 	return k.letterString()
 }
 
+// numberString returns the string representation of the receiver using the
+// steno number order (#12K3W4R50*EU6R7B8G9SDZ)
 func (k Keymask) numberString() string {
 	str := ""
 	if !k.hasNumbers() {
@@ -143,8 +156,8 @@ func (k Keymask) numberString() string {
 	str += stringIfContains(k, LeftW, "W")
 	str += stringIfContains(k, LeftH, "4")
 	str += stringIfContains(k, LeftR, "R")
-	str += stringIfContains(k, A, "5")
-	str += stringIfContains(k, O, "0")
+	str += stringIfContains(k, StenoA, "5")
+	str += stringIfContains(k, StenoO, "0")
 	if k&Star == Star {
 		str += "*"
 	} else {
@@ -153,8 +166,8 @@ func (k Keymask) numberString() string {
 			str += "-"
 		}
 	}
-	str += stringIfContains(k, E, "E")
-	str += stringIfContains(k, U, "U")
+	str += stringIfContains(k, StenoE, "E")
+	str += stringIfContains(k, StenoU, "U")
 	str += stringIfContains(k, RightF, "6")
 	str += stringIfContains(k, RightR, "R")
 	str += stringIfContains(k, RightP, "7")
@@ -168,6 +181,8 @@ func (k Keymask) numberString() string {
 	return str
 }
 
+// letterString returns the string representation of the receiver using the
+// steno letter order (STKPWHRAO*EUFRPBLGTSDZ)
 func (k Keymask) letterString() string {
 	str := ""
 	str += stringIfContains(k, LeftS, "S")
@@ -177,8 +192,8 @@ func (k Keymask) letterString() string {
 	str += stringIfContains(k, LeftW, "W")
 	str += stringIfContains(k, LeftH, "H")
 	str += stringIfContains(k, LeftR, "R")
-	str += stringIfContains(k, A, "A")
-	str += stringIfContains(k, O, "O")
+	str += stringIfContains(k, StenoA, "A")
+	str += stringIfContains(k, StenoO, "O")
 	if k&Star == Star {
 		str += "*"
 	} else {
@@ -187,8 +202,8 @@ func (k Keymask) letterString() string {
 			str += "-"
 		}
 	}
-	str += stringIfContains(k, E, "E")
-	str += stringIfContains(k, U, "U")
+	str += stringIfContains(k, StenoE, "E")
+	str += stringIfContains(k, StenoU, "U")
 	str += stringIfContains(k, RightF, "F")
 	str += stringIfContains(k, RightR, "R")
 	str += stringIfContains(k, RightP, "P")
@@ -202,7 +217,7 @@ func (k Keymask) letterString() string {
 	return str
 }
 
-// stringIfEqual returns the given string if the first Keymask contains the
+// stringIfContains returns the given string if the first Keymask contains the
 // second, otherwise it returns empty string
 func stringIfContains(k1, k2 Keymask, s string) string {
 	if k1&k2 == k2 {
@@ -224,45 +239,52 @@ func (k Keymask) hasStar() bool {
 }
 
 func (k Keymask) hasVowel() bool {
-	return k&(A|O|E|U) > 0
+	return k&(StenoA|StenoO|StenoE|StenoU) > 0
 }
 
 func (k Keymask) hasNumbers() bool {
-	return k&(LeftS|LeftT|LeftP|LeftH|A|O|RightF|RightP|RightL|RightT) > 0
+	return k&(LeftS|LeftT|LeftP|LeftH|StenoA|StenoO|RightF|RightP|RightL|RightT) > 0
 }
 
-func (k Keymask) IsFingerspelling() bool {
-	fingerspellings := []Keymask{
-		A,
-		LeftP | LeftW,
-		LeftK | LeftR,
-		LeftT | LeftK,
-		E,
-		LeftT | LeftP,
-		LeftT | LeftK | LeftP | LeftW,
-		LeftH,
-		E | U,
-		LeftS | LeftK | LeftW | LeftR,
-		LeftK,
-		LeftH | LeftR,
-		LeftP | LeftH,
-		LeftT | LeftP | LeftH,
-		O,
-		LeftP,
-		LeftK | LeftW,
-		LeftR,
-		LeftS,
-		LeftT,
-		U,
-		LeftS | LeftR,
-		LeftW,
-		LeftK | LeftP,
-		LeftK | LeftW | LeftR,
-		LeftS | LeftT | LeftK | LeftP | LeftW,
-		LeftS | LeftT | LeftK, // alternate z
+// allFingerspellings returns the mapping of each of Plover's left-hand
+// fingerspellings (including alternate definitions) to their corresponging
+// Qwerty keys. Note: the steno chords do not include `*`.
+func allFingerspellings() map[Keymask]QwertyKey {
+	return map[Keymask]QwertyKey{
+		StenoA:                                QwertyA,
+		LeftP | LeftW:                         QwertyB,
+		LeftK | LeftR:                         QwertyC,
+		LeftT | LeftK:                         QwertyD,
+		StenoE:                                QwertyE,
+		LeftT | LeftP:                         QwertyF,
+		LeftT | LeftK | LeftP | LeftW:         QwertyG,
+		LeftH:                                 QwertyH,
+		StenoE | StenoU:                       QwertyI,
+		LeftS | LeftK | LeftW | LeftR:         QwertyJ,
+		LeftK:                                 QwertyK,
+		LeftH | LeftR:                         QwertyL,
+		LeftP | LeftH:                         QwertyM,
+		LeftT | LeftP | LeftH:                 QwertyN,
+		StenoO:                                QwertyO,
+		LeftP:                                 QwertyP,
+		LeftK | LeftW:                         QwertyQ,
+		LeftR:                                 QwertyR,
+		LeftS:                                 QwertyS,
+		LeftT:                                 QwertyT,
+		StenoU:                                QwertyU,
+		LeftS | LeftR:                         QwertyV,
+		LeftW:                                 QwertyW,
+		LeftK | LeftP:                         QwertyX,
+		LeftK | LeftW | LeftR:                 QwertyY,
+		LeftS | LeftT | LeftK | LeftP | LeftW: QwertyZ,
+		LeftS | LeftT | LeftK:                 QwertyZ, // alternate z
 	}
-	for _, fingerspelling := range fingerspellings {
-		if k == fingerspelling {
+}
+
+// isFingerspelling returns true if the receiver matches a Plover fingerspelling
+func (k Keymask) isFingerspelling() bool {
+	for stroke := range allFingerspellings() {
+		if k == stroke {
 			return true
 		}
 	}
