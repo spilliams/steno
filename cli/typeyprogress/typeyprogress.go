@@ -1,4 +1,4 @@
-package jsonfile
+package typeyprogress
 
 import (
 	"bytes"

@@ -1,0 +1,21 @@
+{
+    "escape": "SKP",
+    "space": "SP",
+    "tab": "TPW",
+    "return": "TR",
+    "home": "SKW",
+    "pageUp": "SKPR",
+    "pageDown": "SKWR",
+    "end": "SWR",
+    "backspace": "KPW",
+    "delete": "PWR",
+    "up": "KPR",
+    "down": "KWR",
+    "left": "KW",
+    "right": "WR",
+    "layer": "-FRLG",
+    "shift": "-FRPLG",
+    "ctrl": "*FRLG",
+    "alt": "-FRBLG",
+    "gui": "-FRLGTS"
+}
