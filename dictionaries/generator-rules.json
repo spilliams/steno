@@ -15,7 +15,7 @@
     "right": "TREU",
     "layer": "-FRLG",
     "shift": "-FRPLG",
-    "ctrl": "*FRLG",
+    "ctrl": "-FRLGTS",
     "alt": "-FRBLG",
-    "gui": "-FRLGTS"
+    "gui": "-FRLGDZ"
 }

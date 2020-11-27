@@ -122,6 +122,12 @@ func newGenerateDictionaryCmd() *cobra.Command {
 		Aliases: []string{"gen-dict"},
 		Args:    cobra.ExactArgs(1),
 		Short:   "Generates a Plover dictionary file from a set of rules.",
+		Long: `Generates a Plover dictionary file from a set of rules. It uses
+the following factory options:
+Non-standard modifier combinations: true,
+Fingerspellings: true,
+Left-hand numbers: Numbers 0-5
+Left-hand star-numbers: F1-F5 and F12`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			rules, err := dictionary.ReadRulesFile(args[0])
 			if err != nil {
@@ -136,7 +142,13 @@ func newGenerateDictionaryCmd() *cobra.Command {
 			}
 			log.Info("rules are valid")
 
-			f := dictionary.NewFactory(nil)
+			// TODO: make these factory options configurable from command line
+			f := dictionary.NewFactory(dictionary.FactoryOpts{
+				NonstandardModCombinations: true,
+				Fingerspellings:            true,
+				NumbersLeft:                dictionary.NumberOptionNumbers,
+				NumberStarsLeft:            dictionary.NumberOptionFunctions,
+			})
 			d := f.Generate(rules)
 
 			// encode d into a buffer of bytes
