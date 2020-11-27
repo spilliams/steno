@@ -230,3 +230,40 @@ func (k Keymask) hasVowel() bool {
 func (k Keymask) hasNumbers() bool {
 	return k&(LeftS|LeftT|LeftP|LeftH|A|O|RightF|RightP|RightL|RightT) > 0
 }
+
+func (k Keymask) IsFingerspelling() bool {
+	fingerspellings := []Keymask{
+		A,
+		LeftP | LeftW,
+		LeftK | LeftR,
+		LeftT | LeftK,
+		E,
+		LeftT | LeftP,
+		LeftT | LeftK | LeftP | LeftW,
+		LeftH,
+		E | U,
+		LeftS | LeftK | LeftW | LeftR,
+		LeftK,
+		LeftH | LeftR,
+		LeftP | LeftH,
+		LeftT | LeftP | LeftH,
+		O,
+		LeftP,
+		LeftK | LeftW,
+		LeftR,
+		LeftS,
+		LeftT,
+		U,
+		LeftS | LeftR,
+		LeftW,
+		LeftK | LeftP,
+		LeftK | LeftW | LeftR,
+		LeftS | LeftT | LeftK | LeftP | LeftW,
+	}
+	for _, fingerspelling := range fingerspellings {
+		if k == fingerspelling {
+			return true
+		}
+	}
+	return false
+}
