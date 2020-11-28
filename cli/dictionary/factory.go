@@ -168,10 +168,10 @@ func (f *Factory) Generate(r *Rules) *Dictionary {
 		keys[Steno0|Star] = F11
 	}
 
-	d := make(map[Keymask]string)
+	d := make(map[*Brief]string)
 	for stenoMod, qwertyMod := range mods {
 		for stenoKey, qwertyKey := range keys {
-			d[stenoMod|stenoKey] = fmt.Sprintf(definitionFmt, qwertyMod.apply(string(qwertyKey)))
+			d[SingleStrokeBrief(stenoMod|stenoKey)] = fmt.Sprintf(definitionFmt, qwertyMod.apply(string(qwertyKey)))
 		}
 	}
 

@@ -3,22 +3,25 @@ package dictionary
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+
+	"github.com/apex/log"
 )
 
-// Dictionary represents a mapping of keymasks to qwertystrokes
-type Dictionary map[Keymask]string
+// Dictionary represents a mapping of briefs to qwertystrokes
+type Dictionary map[*Brief]string
 
-func (d *Dictionary) add(chord Keymask, definition string) {
-	copy := map[Keymask]string(*d)
-	copy[chord] = definition
+func (d *Dictionary) add(b *Brief, definition string) {
+	copy := map[*Brief]string(*d)
+	copy[b] = definition
 	*d = copy
 }
 
 func (d *Dictionary) MarshalJSON() ([]byte, error) {
 	// Keymasks are so large that something something stack overflow?
 	definitions := make(map[string]string)
-	copy := map[Keymask]string(*d)
+	copy := map[*Brief]string(*d)
 	for k, def := range copy {
 		definitions[k.String()] = def
 	}
@@ -39,10 +42,36 @@ func ReadFile(filename string) (*Dictionary, error) {
 	if err != nil {
 		return nil, err
 	}
-	var inMap map[Keymask]string
+	var inMap map[string]string
 	if err = json.Unmarshal(inBytes, &inMap); err != nil {
 		return nil, err
 	}
-	d := Dictionary(inMap)
+	briefMap := make(map[*Brief]string)
+	for key, definition := range inMap {
+		brief, err := ParseBrief(key)
+		if err != nil {
+			return nil, err
+		}
+
+		briefMap[brief] = definition
+	}
+	d := Dictionary(briefMap)
 	return &d, nil
+}
+
+func (d *Dictionary) MustNotCollideWith(other *Dictionary) []error {
+	errs := make([]error, 0)
+	for briefA, definitionA := range map[*Brief]string(*d) {
+		for briefB, definitionB := range map[*Brief]string(*other) {
+			if briefA.isEqual(briefB) {
+				log.WithFields(log.Fields{
+					"brief":       briefA,
+					"definitionA": definitionA,
+					"definitionB": definitionB,
+				}).Warnf("Brief collides with other dictionary")
+				errs = append(errs, fmt.Errorf("Brief %s collides with other dictionary (%s vs %s)", briefA, definitionA, definitionB))
+			}
+		}
+	}
+	return errs
 }

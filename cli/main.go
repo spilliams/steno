@@ -178,7 +178,19 @@ func newCompareDictionariesCmd() *cobra.Command {
 		Args:    cobra.ExactArgs(2),
 		Short:   "Compares two dictionary files and prints out the collisions in their chords",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// a, err :=
+			a, err := dictionary.ReadFile(args[0])
+			if err != nil {
+				return err
+			}
+			b, err := dictionary.ReadFile(args[1])
+			if err != nil {
+				return err
+			}
+
+			errs := a.MustNotCollideWith(b)
+			if len(errs) > 0 {
+				log.Warn("You may want to perform lookups to see if there are other briefs for the definitions. You may also check for multi-brief combinations (such as `RE` to mean `{re^}` for a word starting in \"re\")")
+			}
 			return nil
 		},
 	}

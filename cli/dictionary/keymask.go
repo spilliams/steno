@@ -1,7 +1,6 @@
 package dictionary
 
 import (
-	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
@@ -290,21 +289,4 @@ func (k Keymask) isFingerspelling() bool {
 		}
 	}
 	return false
-}
-
-func (k *Keymask) UnmarshalJSON(b []byte) error {
-	var in string
-	if err := json.Unmarshal(b, &in); err != nil {
-		return err
-	}
-	newK, err := ParseStroke(in)
-	if err != nil {
-		return err
-	}
-	*k = newK
-	return nil
-}
-
-func (k *Keymask) MarshalJSON() ([]byte, error) {
-	return json.Marshal(k.String())
 }
