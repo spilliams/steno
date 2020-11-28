@@ -186,16 +186,12 @@ func (r *Rules) MustBeValid() []error {
 }
 
 func (r *Rules) UnmarshalJSON(b []byte) error {
-	var stringMap map[string]string
+	var stringMap map[string]Keymask
 	if err := json.Unmarshal(b, &stringMap); err != nil {
 		return err
 	}
 	newRules := Rules{}
-	for k, v := range stringMap {
-		stroke, err := ParseStroke(v)
-		if err != nil {
-			return err
-		}
+	for k, stroke := range stringMap {
 		log.WithFields(log.Fields{
 			"key":    k,
 			"stroke": stroke,

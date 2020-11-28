@@ -1,6 +1,7 @@
 package dictionary
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
@@ -21,11 +22,11 @@ const (
 	LeftW     Keymask = 1 << 17
 	LeftH     Keymask = 1 << 16
 	LeftR     Keymask = 1 << 15
-	StenoA    Keymask = 1 << 14
-	StenoO    Keymask = 1 << 13
+	LeftA     Keymask = 1 << 14
+	LeftO     Keymask = 1 << 13
 	Star      Keymask = 1 << 12
-	StenoE    Keymask = 1 << 11
-	StenoU    Keymask = 1 << 10
+	RightE    Keymask = 1 << 11
+	RightU    Keymask = 1 << 10
 	RightF    Keymask = 1 << 9
 	RightR    Keymask = 1 << 8
 	RightP    Keymask = 1 << 7
@@ -42,12 +43,12 @@ const (
 	Steno2    Keymask = Num | LeftT
 	Steno3    Keymask = Num | LeftP
 	Steno4    Keymask = Num | LeftH
-	Steno5    Keymask = Num | StenoA
+	Steno5    Keymask = Num | LeftA
 	Steno6    Keymask = Num | RightF
 	Steno7    Keymask = Num | RightP
 	Steno8    Keymask = Num | RightL
 	Steno9    Keymask = Num | RightT
-	Steno0    Keymask = Num | StenoO
+	Steno0    Keymask = Num | LeftO
 )
 
 // ParseStroke takes in a string (e.g. "STPH") and returns a Keymask or an error.
@@ -156,8 +157,8 @@ func (k Keymask) numberString() string {
 	str += stringIfContains(k, LeftW, "W")
 	str += stringIfContains(k, LeftH, "4")
 	str += stringIfContains(k, LeftR, "R")
-	str += stringIfContains(k, StenoA, "5")
-	str += stringIfContains(k, StenoO, "0")
+	str += stringIfContains(k, LeftA, "5")
+	str += stringIfContains(k, LeftO, "0")
 	if k&Star == Star {
 		str += "*"
 	} else {
@@ -166,8 +167,8 @@ func (k Keymask) numberString() string {
 			str += "-"
 		}
 	}
-	str += stringIfContains(k, StenoE, "E")
-	str += stringIfContains(k, StenoU, "U")
+	str += stringIfContains(k, RightE, "E")
+	str += stringIfContains(k, RightU, "U")
 	str += stringIfContains(k, RightF, "6")
 	str += stringIfContains(k, RightR, "R")
 	str += stringIfContains(k, RightP, "7")
@@ -192,8 +193,8 @@ func (k Keymask) letterString() string {
 	str += stringIfContains(k, LeftW, "W")
 	str += stringIfContains(k, LeftH, "H")
 	str += stringIfContains(k, LeftR, "R")
-	str += stringIfContains(k, StenoA, "A")
-	str += stringIfContains(k, StenoO, "O")
+	str += stringIfContains(k, LeftA, "A")
+	str += stringIfContains(k, LeftO, "O")
 	if k&Star == Star {
 		str += "*"
 	} else {
@@ -202,8 +203,8 @@ func (k Keymask) letterString() string {
 			str += "-"
 		}
 	}
-	str += stringIfContains(k, StenoE, "E")
-	str += stringIfContains(k, StenoU, "U")
+	str += stringIfContains(k, RightE, "E")
+	str += stringIfContains(k, RightU, "U")
 	str += stringIfContains(k, RightF, "F")
 	str += stringIfContains(k, RightR, "R")
 	str += stringIfContains(k, RightP, "P")
@@ -239,11 +240,11 @@ func (k Keymask) hasStar() bool {
 }
 
 func (k Keymask) hasVowel() bool {
-	return k&(StenoA|StenoO|StenoE|StenoU) > 0
+	return k&(LeftA|LeftO|RightE|RightU) > 0
 }
 
 func (k Keymask) hasNumbers() bool {
-	return k&(LeftS|LeftT|LeftP|LeftH|StenoA|StenoO|RightF|RightP|RightL|RightT) > 0
+	return k&(LeftS|LeftT|LeftP|LeftH|LeftA|LeftO|RightF|RightP|RightL|RightT) > 0
 }
 
 // allFingerspellings returns the mapping of each of Plover's left-hand
@@ -251,27 +252,27 @@ func (k Keymask) hasNumbers() bool {
 // Qwerty keys. Note: the steno chords do not include `*`.
 func allFingerspellings() map[Keymask]QwertyKey {
 	return map[Keymask]QwertyKey{
-		StenoA:                                QwertyA,
+		LeftA:                                 QwertyA,
 		LeftP | LeftW:                         QwertyB,
 		LeftK | LeftR:                         QwertyC,
 		LeftT | LeftK:                         QwertyD,
-		StenoE:                                QwertyE,
+		RightE:                                QwertyE,
 		LeftT | LeftP:                         QwertyF,
 		LeftT | LeftK | LeftP | LeftW:         QwertyG,
 		LeftH:                                 QwertyH,
-		StenoE | StenoU:                       QwertyI,
+		RightE | RightU:                       QwertyI,
 		LeftS | LeftK | LeftW | LeftR:         QwertyJ,
 		LeftK:                                 QwertyK,
 		LeftH | LeftR:                         QwertyL,
 		LeftP | LeftH:                         QwertyM,
 		LeftT | LeftP | LeftH:                 QwertyN,
-		StenoO:                                QwertyO,
+		LeftO:                                 QwertyO,
 		LeftP:                                 QwertyP,
 		LeftK | LeftW:                         QwertyQ,
 		LeftR:                                 QwertyR,
 		LeftS:                                 QwertyS,
 		LeftT:                                 QwertyT,
-		StenoU:                                QwertyU,
+		RightU:                                QwertyU,
 		LeftS | LeftR:                         QwertyV,
 		LeftW:                                 QwertyW,
 		LeftK | LeftP:                         QwertyX,
@@ -289,4 +290,21 @@ func (k Keymask) isFingerspelling() bool {
 		}
 	}
 	return false
+}
+
+func (k *Keymask) UnmarshalJSON(b []byte) error {
+	var in string
+	if err := json.Unmarshal(b, &in); err != nil {
+		return err
+	}
+	newK, err := ParseStroke(in)
+	if err != nil {
+		return err
+	}
+	*k = newK
+	return nil
+}
+
+func (k *Keymask) MarshalJSON() ([]byte, error) {
+	return json.Marshal(k.String())
 }

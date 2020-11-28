@@ -5,6 +5,63 @@ import (
 	"testing"
 )
 
+func TestRulesMustUnmarshal(t *testing.T) {
+	jsonFile := `{
+		"escape": "SKP",
+		"space": "SP",
+		"tab": "TPW",
+		"return": "TRE",
+		"home": "PWH",
+		"pageUp": "TKPWU",
+		"pageDown": "TKPWH",
+		"end": "TKW",
+		"backspace": "KPW",
+		"delete": "PWR",
+		"up": "PU",
+		"down": "TKPH",
+		"left": "TPHRE",
+		"right": "TREU",
+		"layer": "-FRLG",
+		"shift": "-FRPLG",
+		"ctrl": "-FRLGTS",
+		"alt": "-FRBLG",
+		"gui": "-FRLGDZ"
+	}`
+	expected := Rules{
+		Escape:    LeftS | LeftK | LeftP,
+		Space:     LeftS | LeftP,
+		Tab:       LeftT | LeftP | LeftW,
+		Return:    LeftT | LeftR | RightE,
+		Home:      LeftP | LeftW | LeftH,
+		PageUp:    LeftT | LeftK | LeftP | LeftW | RightU,
+		PageDown:  LeftT | LeftK | LeftP | LeftW | LeftH,
+		End:       LeftT | LeftK | LeftW,
+		Backspace: LeftK | LeftP | LeftW,
+		Delete:    LeftP | LeftW | LeftR,
+		Up:        LeftP | RightU,
+		Down:      LeftT | LeftK | LeftP | LeftH,
+		Left:      LeftT | LeftP | LeftH | LeftR | RightE,
+		Right:     LeftT | LeftR | RightE | RightU,
+		Layer:     RightF | RightR | RightL | RightG,
+		Shift:     RightF | RightR | RightP | RightL | RightG,
+		Ctrl:      RightF | RightR | RightL | RightG | RightT | RightS,
+		Alt:       RightF | RightR | RightB | RightL | RightG,
+		Gui:       RightF | RightR | RightL | RightG | RightD | RightZ,
+	}
+
+	actual := Rules{}
+	if err := json.Unmarshal([]byte(jsonFile), &actual); err != nil {
+		t.Fatal(err)
+	}
+	t.Log("expected rules:")
+	t.Log(expected)
+	t.Log("actual rules:")
+	t.Log(actual)
+	if expected != actual {
+		t.Fatal("Actual rules do not match expected")
+	}
+}
+
 func TestRulesMustBeValid(t *testing.T) {
 	cases := []struct {
 		name  string

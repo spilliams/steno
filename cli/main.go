@@ -39,7 +39,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newMergeProgressCmd())
 	cmd.AddCommand(newCleanProgressCmd())
 	cmd.AddCommand(newGenerateDictionaryCmd())
-	// TODO: new command that compares two dictionary files and finds collisions between keys
+	cmd.AddCommand(newCompareDictionariesCmd())
 
 	cmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "turn this on to get MORE")
 
@@ -169,4 +169,17 @@ Left-hand star-numbers: F1-F5 and F12`,
 	cmd.Flags().StringVarP(&outputFile, "output", "o", "dict.json", "The name to save the dictionary file as (optional)")
 
 	return cmd
+}
+
+func newCompareDictionariesCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:     "compare-dictionaries a.json b.json",
+		Aliases: []string{"cmp-dict"},
+		Args:    cobra.ExactArgs(2),
+		Short:   "Compares two dictionary files and prints out the collisions in their chords",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			// a, err :=
+			return nil
+		},
+	}
 }
