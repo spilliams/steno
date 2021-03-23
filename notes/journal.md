@@ -1,3 +1,21 @@
+- 2921-03-23: Last night and this morning have been trying to get steno working
+    on my Ergodox EZ. First milestone achieved was recreating the keymap and
+    colors from Oryx. Now it's time to get a steno layer on it! Some early
+    trouble:
+    - using the existing steno keymap doesn't work with Plover on my work pc.
+    - I copied the existing steno map into my new spilliams keymap. This also
+        doesn't work but it does make the other layers more friendly.
+    - I can already tell I'll have a hard time doing steno with these springs
+        (kailh copper I think? 40gf nominal, but tactile makes them 50gf), and
+        these keycaps (DSA profile)
+    - the georgi does work on the work machine, so it isn't an OS issue with
+        COM ports.
+    I'll have to come back to this tonight, but some promising early results I
+    suppose. I'll have to look into new switches and caps?? I like my latest set
+    thouh...
+    I can try out the kailh silver (40gf linear), that'll get closer to the
+    experience I have with the Georgi (Matias linear reds, 35cN~=35gf), without
+    sacrificing the qwerty/gaming performance.
 - 2020-11-25 cont'd: I've started a tiny bit of coding with steno. It's alive!
     Starting to think about building my own "single stroke commands" dictionary,
     but because it's so many different chords, thinking of building a generator
@@ -252,7 +270,8 @@
     instead of a steno machine's standard 3, the third thumb button (on both
     sides) is my number bar modifier.  
     I wonder again how I might use the extra two pinky keys on the left side
-    too, since I probably won't need--wait...i'm not so terrible at georgi qwerty! [that last phrase only took several minutes to puzzle out, and
+    too, since I probably won't need--wait...i'm not so terrible at georgi
+    qwerty! [that last phrase only took several minutes to puzzle out, and
     even then i didn't know all the punctuation keys]. Anyway, even while I'm
     doing steno I'll want a way to hit arbitrary shortcuts. That'll be
     interesting.
