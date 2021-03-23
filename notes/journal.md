@@ -2,6 +2,7 @@
     on my Ergodox EZ. First milestone achieved was recreating the keymap and
     colors from Oryx. Now it's time to get a steno layer on it! Some early
     trouble:
+    
     - using the existing steno keymap doesn't work with Plover on my work pc.
     - I copied the existing steno map into my new spilliams keymap. This also
         doesn't work but it does make the other layers more friendly.
@@ -10,12 +11,19 @@
         these keycaps (DSA profile)
     - the georgi does work on the work machine, so it isn't an OS issue with
         COM ports.
+    
     I'll have to come back to this tonight, but some promising early results I
     suppose. I'll have to look into new switches and caps?? I like my latest set
-    thouh...
+    though...  
     I can try out the kailh silver (40gf linear), that'll get closer to the
     experience I have with the Georgi (Matias linear reds, 35cN~=35gf), without
-    sacrificing the qwerty/gaming performance.
+    sacrificing the qwerty/gaming performance. That or Gateron Clear (another
+    35).  
+    Success! Using Paul Fioravanti's keymap I got ergodox to do steno in Gemini
+    mode (COM5).  
+    I had to put the steno layer first, to enable it to use `LM()` to call the
+    qwerty layer with ctrl/alt/etc.  
+    Now nothing stands in my way from practicing steno every day?!
 - 2020-11-25 cont'd: I've started a tiny bit of coding with steno. It's alive!
     Starting to think about building my own "single stroke commands" dictionary,
     but because it's so many different chords, thinking of building a generator
