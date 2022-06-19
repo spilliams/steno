@@ -1,4 +1,4 @@
-- 2921-03-23: Last night and this morning have been trying to get steno working
+- 2021-03-23: Last night and this morning have been trying to get steno working
     on my Ergodox EZ. First milestone achieved was recreating the keymap and
     colors from Oryx. Now it's time to get a steno layer on it! Some early
     trouble:
@@ -24,6 +24,7 @@
     I had to put the steno layer first, to enable it to use `LM()` to call the
     qwerty layer with ctrl/alt/etc.  
     Now nothing stands in my way from practicing steno every day?!
+- 2021-03-05: hi. maybe I'll write some code with steno!
 - 2020-11-25 cont'd: I've started a tiny bit of coding with steno. It's alive!
     Starting to think about building my own "single stroke commands" dictionary,
     but because it's so many different chords, thinking of building a generator
