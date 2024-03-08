@@ -106,6 +106,9 @@ func newCleanProgressCmd() *cobra.Command {
 			}
 			a = typeyprogress.Clean(a)
 			log.WithField("a", a).Debug("json read")
+			if outputFile == "" {
+				outputFile = args[0]
+			}
 			return typeyprogress.WriteFile(a, outputFile)
 		},
 	}
