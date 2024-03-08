@@ -3,6 +3,7 @@ package typeyprogress
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"sort"
 	"strings"
@@ -21,32 +22,42 @@ func ReadFile(filename string) (map[string]int, error) {
 }
 
 func Clean(a map[string]int) map[string]int {
+	chordCount := 0
 	// trim space from keys
 	trimmed := make(map[string]int)
 	for k, v := range a {
 		trimmedKey := strings.TrimSpace(k)
 		existing, ok := trimmed[trimmedKey]
+		chordCount += v
 		if ok {
 			trimmed[trimmedKey] = existing + v
 		} else {
 			trimmed[trimmedKey] = v
 		}
 	}
+	fmt.Printf("%d words chorded correctly %d times\n", len(a), chordCount)
 	return trimmed
 }
 
 func Merge(a, b map[string]int) (map[string]int, error) {
+	wordCount := 0
+	chordCount := 0
 	c := make(map[string]int, len(a))
 	for k, v := range a {
 		c[k] = v
+		wordCount++
+		chordCount += v
 	}
 	for k, v := range b {
 		if prior, ok := c[k]; ok {
 			c[k] = prior + v
 		} else {
 			c[k] = v
+			wordCount++
 		}
+		chordCount += v
 	}
+	fmt.Printf("%d words chorded correctly %d times\n", wordCount, chordCount)
 	return c, nil
 }
 
